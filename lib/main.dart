@@ -37,6 +37,8 @@ List<Color> colors = [
 class _MyHomePageState extends State<MyHomePage> {
   late Color currentColor;
   late String currentText;
+  List<bool> results = [];
+  double answerRate = 0.0;
 
   @override
   void initState() {
@@ -52,11 +54,14 @@ class _MyHomePageState extends State<MyHomePage> {
   void checkAnswer(Color guess) {
     if (currentColor == guess) {
       print("正解!");
+      results.add(true);
     }
     else {
       print("不正解...");
+      results.add(false);
     }
     setState(() {
+      answerRate = results.where((e) => e).length/results.length*100;
       updateProblem();
     });
   }
@@ -103,7 +108,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 )
               ],
-            )
+            ),
+            Text("正答率: ${answerRate.toStringAsFixed(1)} % (${results.where((e) => e).length}/${results.length})")
           ],
         ),
       ),
