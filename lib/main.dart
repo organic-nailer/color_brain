@@ -1,5 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, use_key_in_widget_constructors, prefer_const_constructors, avoid_print, sized_box_for_whitespace
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -68,6 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Text("文字の色のボタンを押そう", style: TextStyle(fontSize: 30),),
             Padding(
               padding: const EdgeInsets.all(32.0),
               child: Text(currentText, style: TextStyle(color: currentColor, fontSize: 100),),
@@ -81,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     onPressed: () {
                       checkAnswer(Colors.red);
                     },
-                    child: const Text("Red"),
+                    child: Text("Red"),
                   ),
                 ),
                 Padding(
@@ -90,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     onPressed: () {
                       checkAnswer(Colors.green);
                     },
-                    child: const Text("Green"),
+                    child: Text("Green"),
                   ),
                 ),
                 Padding(
@@ -99,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     onPressed: () {
                       checkAnswer(Colors.blue);
                     },
-                    child: const Text("Blue"),
+                    child: Text("Blue"),
                   ),
                 )
               ],
