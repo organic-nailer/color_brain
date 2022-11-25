@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:math';
 
+import 'package:color_brain/result.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -39,11 +41,28 @@ class _MyHomePageState extends State<MyHomePage> {
   late String currentText;
   List<bool> results = [];
   double answerRate = 0.0;
+  late Stopwatch stopwatch;
+  late Timer timer;
+  double currentTimeSec = 0.0;
+  final int numProblem = 25;
 
   @override
   void initState() {
     super.initState();
+    stopwatch = Stopwatch()..start();
+    timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      setState(() {
+        currentTimeSec = stopwatch.elapsedMilliseconds / 1000;
+      });
+    });
     updateProblem();
+  }
+
+  @override
+  void dispose() {
+    stopwatch.stop();
+    timer.cancel();
+    super.dispose();
   }
 
   void updateProblem() {
@@ -60,10 +79,16 @@ class _MyHomePageState extends State<MyHomePage> {
       print("不正解...");
       results.add(false);
     }
-    setState(() {
-      answerRate = results.where((e) => e).length/results.length*100;
-      updateProblem();
-    });
+    answerRate = results.where((e) => e).length/results.length*100;
+    if (results.length == numProblem) {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (_) => ResultPage(answerRate, currentTimeSec)));
+    }
+    else {
+      setState(() {
+        updateProblem();
+      });
+    }
   }
 
   @override
@@ -73,6 +98,11 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            const Text("文字の色のボタンを押そう", style: TextStyle(fontSize: 30),),
+            Text(
+              "(${results.length + 1}/$numProblem)${currentTimeSec.toStringAsFixed(1).padLeft(5, "0")} sec",
+              style: const TextStyle(fontSize: 30),
+            ),
             Padding(
               padding: const EdgeInsets.all(32.0),
               child: Text(currentText, style: TextStyle(color: currentColor, fontSize: 100),),
